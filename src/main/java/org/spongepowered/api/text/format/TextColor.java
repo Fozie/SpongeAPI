@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,39 +24,30 @@
  */
 package org.spongepowered.api.text.format;
 
-import java.awt.Color;
+import org.spongepowered.api.CatalogType;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.TextElement;
+import org.spongepowered.api.util.Color;
+import org.spongepowered.api.util.annotation.CatalogedBy;
 
 /**
- * A TextColor represents a color that a
- * {@link org.spongepowered.api.text.message.Message} has. A list of the base
- * text colors provided in Minecraft is provided in
- * {@link org.spongepowered.api.text.format.TextColors}.
+ * Represents the color of the text of a {@link Text}.
+ *
+ * @see TextColors
  */
-public interface TextColor {
+@CatalogedBy(TextColors.class)
+public interface TextColor extends CatalogType, TextElement {
 
     /**
-     * Returns the corresponding {@link java.awt.Color} for this TextColor.
+     * Returns the corresponding {@link Color} for this {@link TextColor}.
      *
-     * @return A Color
+     * @return The RGB color of this text color
      */
     Color getColor();
 
-    /**
-     * Returns whether this color is the reset color.
-     *
-     * @return A boolean for if this color is the reset color
-     */
-    boolean isReset();
-
-    /**
-     * A Base text color is one that is represented in Minecraft. There are
-     * several Base colors provided in Minecraft which are specified in
-     * {@link org.spongepowered.api.text.format.TextColors}. Base extends
-     * FormattingCode because it does have a corresponding formatting code; it
-     * is a single, pure text color.
-     */
-    interface Base extends FormattingCode, TextColor {
-
+    @Override
+    default void applyTo(Text.Builder builder) {
+        builder.color(this);
     }
 
 }

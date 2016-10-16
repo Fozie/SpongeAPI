@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,7 +22,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.entity.projectile;
 
 import org.spongepowered.api.entity.Entity;
@@ -51,20 +50,5 @@ public interface Projectile extends Entity {
      * @param shooter The projectile source that shot this projectile
      */
     void setShooter(ProjectileSource shooter);
-
-    /**
-     * Gets the damage this arrow will deal to a {@link org.spongepowered.api.entity.living.Living}
-     * if hit.
-     *
-     * @return The damage of this arrow
-     */
-    double getDamage();
-
-    /**
-     * Sets the damage this arrow will deal to a LivingEntity if hit.
-     *
-     * @param damage The damage
-     */
-    void setDamage(double damage);
 
 }

@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,18 +24,87 @@
  */
 package org.spongepowered.api;
 
+import org.spongepowered.api.plugin.Plugin;
+
 /**
  * Top to bottom order of the lifecycle.
  */
 public enum GameState {
+    /**
+     * During this state, each {@link Plugin} instance
+     * has been created.
+     */
     CONSTRUCTION,
-    LOAD_COMPLETE,
+
+    /**
+     * Plugins are able to access a default logger instance and access
+     * configuration files.
+     */
     PRE_INITIALIZATION,
+
+    /**
+     * Plugins should finish any work needed to become functional. Commands
+     * should be registered at this stage.
+     */
     INITIALIZATION,
+
+    /**
+     * Plugins have been initialized and should be ready for action. Loggers,
+     * configurations, and third party plugin API's should be prepared for
+     * interaction.
+     */
     POST_INITIALIZATION,
+
+    /**
+     * All plugin initialization and registration should be completed. The
+     * server is now ready to start.
+     */
+    LOAD_COMPLETE,
+
+    /**
+     * The {@link Server} instance exists, but worlds have not yet loaded.
+     */
     SERVER_ABOUT_TO_START,
+
+    /**
+     * The server instance exists and worlds are loaded.
+     */
     SERVER_STARTING,
+
+    /**
+     * The server is fully loaded and ready to accept clients. All worlds are
+     * loaded and all plugins have been loaded.
+     */
     SERVER_STARTED,
+
+    /**
+     * Server is stopping for any reason. This occurs prior to world saving.
+     */
     SERVER_STOPPING,
-    SERVER_STOPPED
+
+    /**
+     * The server has stopped saving and no players are connected. Any changes
+     * to the worlds are not saved.
+     */
+    SERVER_STOPPED,
+
+    /**
+     * The game is stopping, all network connections should be closed, all
+     * plugins should prepare for shutdown, closing all files.
+     *
+     * <p>Note: In the case that the JVM is terminated, this state may never
+     * be reached.</p>
+     */
+    GAME_STOPPING,
+
+    /**
+     * The game has stopped and the JVM will exit. Plugins shouldn't expect to
+     * receive this event as all files and connections should be terminated.
+     *
+     * <p>Note: In the case that the JVM is terminated, this state may never
+     * be reached.</p>
+     */
+    GAME_STOPPED,
+    ;
+
 }

@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,50 +24,36 @@
  */
 package org.spongepowered.api.entity.projectile;
 
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.FireworkEffectData;
+import org.spongepowered.api.data.value.mutable.ListValue;
+import org.spongepowered.api.entity.explosive.FusedExplosive;
+import org.spongepowered.api.item.FireworkEffect;
+import org.spongepowered.api.item.ItemTypes;
+
 /**
  * Represents a firework.
  */
-public interface Firework extends Projectile {
+public interface Firework extends Projectile, FusedExplosive {
 
     /**
-     * Detonates this firework.
-     */
-    void detonate();
-
-    /**
-     * Gets the current fuse time for this firework.
-     * <p>Usually, after the fuse time passes the detonation time, the
-     * firework will explode.</p>
+     * Gets a copy of the {@link FireworkEffectData} for this firework.
      *
-     * @return The current fuse time
+     * @return A copy of the firework data
      */
-    int getFuseTime();
+    default FireworkEffectData getFireworkData() {
+        return get(FireworkEffectData.class).get();
+    }
 
     /**
-     * Sets the fuse time.
-     * <p>Usually, after the fuse time passes the detonation time, the
-     * firework will explode.</p>
+     * Gets the {@link ListValue} of {@link FireworkEffect}s.
      *
-     * @param fusetime The new fuse time
-     */
-    void setFusetime(int fusetime);
-
-    /**
-     * Gets the detonation time limit.
-     * <p>Usually, after the fuse time passes the detonation time, the
-     * firework will explode.</p>
+     * <p>Note that for {@link ItemTypes#FIREWORK_CHARGE} only the first effect
+     * will apply to the charge.</p>
      *
-     * @return The current max fuse time
+     * @return The list value of firework effects
      */
-    int getDetonationTime();
-
-    /**
-     * Sets the detonation time limit.
-     * <p>Usually, after the fuse time passes the detonation time, the
-     * firework will explode.</p>
-     *
-     * @param detonationTime The new detonation time
-     */
-    void setDetonationTime(int detonationTime);
-
+    default ListValue<FireworkEffect> effects() {
+        return getValue(Keys.FIREWORK_EFFECTS).get();
+    }
 }

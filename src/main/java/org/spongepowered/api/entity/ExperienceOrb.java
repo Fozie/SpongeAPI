@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,23 +24,32 @@
  */
 package org.spongepowered.api.entity;
 
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.ExpOrbData;
+import org.spongepowered.api.data.value.mutable.Value;
+
 /**
  * Represents an experience orb.
  */
 public interface ExperienceOrb extends Entity {
 
     /**
-     * Gets how much experience will be added to the player on pickup.
+     * Gets a copy of the {@link ExpOrbData} associated with this
+     * {@link ExperienceOrb}.
      *
-     * @return Amount of experience
+     * @return A copy of the experience orb data
      */
-    public int getExperience();
+    default ExpOrbData experienceHeld() {
+        return get(ExpOrbData.class).get();
+    }
 
     /**
-     * Sets how much experience will be added to the player on pickup.
+     * Gets the {@link Value} for the amount of "experience" stored.
      *
-     * @param experience The new amount of experience
+     * @return The immutable value for the amount of "experience" stored
      */
-    public void setExperience(int experience);
+    default Value<Integer> experience() {
+        return getValue(Keys.HELD_EXPERIENCE).get();
+    }
 
 }

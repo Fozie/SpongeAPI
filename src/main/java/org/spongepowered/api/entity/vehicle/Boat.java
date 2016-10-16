@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -43,7 +43,7 @@ public interface Boat extends Entity {
      * Gets the maximum speed that this boat is
      * allowed to travel at.
      *
-     * Default value is 0.4
+     * <p>The Default value is 0.4.</p>
      *
      * @return The maximum speed
      */
@@ -53,7 +53,7 @@ public interface Boat extends Entity {
      * Sets the maximum speed that this boat is
      * allowed to travel at.
      *
-     * Default value is 0.4
+     * <p>The Default value is 0.4.</p>
      *
      * @param maxSpeed The new max speed
      */

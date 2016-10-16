@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,15 +25,14 @@
 package org.spongepowered.api.text.translation;
 
 /**
- * A Translatable represents a game object that has a corresponding translation
- * ID. This includes item types, for instance.
+ * Represents a game object with a corresponding translation.
  */
 public interface Translatable {
 
     /**
-     * Returns the Translation that corresponds to this translatable.
+     * Returns the Translation that corresponds to this {@link Translatable}.
      *
-     * @return A Translation
+     * @return The translation of this object
      */
     Translation getTranslation();
 

@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,22 +24,27 @@
  */
 package org.spongepowered.api.entity.projectile.source;
 
+import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.entity.projectile.Projectile;
-import org.spongepowered.api.math.Vector3f;
+
+import java.util.Optional;
 
 /**
- * Represents a {@link ProjectileSource} that is not part of the API, such
- * as a plugin or mod spawning a Projectile.
+ * Represents a {@link ProjectileSource} that is not part of the API, such as a
+ * plugin or mod spawning a Projectile.
  */
 public final class UnknownProjectileSource implements ProjectileSource {
 
-    @Override
-    public <T extends Projectile> T launchProjectile(Class<T> projectileClass) {
-        return null;
+    UnknownProjectileSource() {
     }
 
     @Override
-    public <T extends Projectile> T launchProjectile(Class<T> projectileClass, Vector3f velocity) {
-        return null;
+    public <T extends Projectile> Optional<T> launchProjectile(Class<T> projectileClass) {
+        return Optional.empty();
+    }
+
+    @Override
+    public <T extends Projectile> Optional<T> launchProjectile(Class<T> projectileClass, Vector3d velocity) {
+        return Optional.empty();
     }
 }

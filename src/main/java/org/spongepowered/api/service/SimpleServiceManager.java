@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,26 +22,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.service;
-
-import com.google.common.base.Optional;
-import com.google.common.collect.MapMaker;
-import org.spongepowered.api.plugin.PluginContainer;
-import org.spongepowered.api.plugin.PluginManager;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import java.util.concurrent.ConcurrentMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.google.common.collect.MapMaker;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.event.SpongeEventFactory;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.NamedCause;
+import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.plugin.PluginManager;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+
+/**
+ * The default implementation of {@link ServiceManager}.
+ */
 public class SimpleServiceManager implements ServiceManager {
 
-    private final ConcurrentMap<Class<?>, Provider> providers =
-            new MapMaker().weakKeys().weakValues().concurrencyLevel(3).makeMap();
+    private final ConcurrentMap<Class<?>, ProviderRegistration<?>> providers =
+            new MapMaker().concurrencyLevel(3).makeMap();
     private final PluginManager pluginManager;
 
+    /**
+     * Construct a simple {@link ServiceManager}.
+     *
+     * @param pluginManager The plugin manager to get the
+     *            {@link PluginContainer} for a given plugin
+     */
     @Inject
     public SimpleServiceManager(PluginManager pluginManager) {
         checkNotNull(pluginManager, "pluginManager");
@@ -49,50 +68,77 @@ public class SimpleServiceManager implements ServiceManager {
     }
 
     @Override
-    public <T> void setProvider(Object plugin, Class<T> service, T provider) throws ProviderExistsException {
+    public <T> void setProvider(Object plugin, Class<T> service, T provider) {
         checkNotNull(plugin, "plugin");
         checkNotNull(service, "service");
         checkNotNull(provider, "provider");
 
-        Optional<PluginContainer> containerOptional = pluginManager.fromInstance(plugin);
+        Optional<PluginContainer> containerOptional = this.pluginManager.fromInstance(plugin);
         if (!containerOptional.isPresent()) {
             throw new IllegalArgumentException(
                     "The provided plugin object does not have an associated plugin container "
-                            + "(in other words, is 'plugin' actually your plugin object?");
+                            + "(in other words, is 'plugin' actually your plugin object?)");
         }
 
         PluginContainer container = containerOptional.get();
-
-        providers.put(service, new Provider(container, provider));
+        ProviderRegistration<?> oldProvider = this.providers.put(service, new Provider<>(container, service, provider));
+        Sponge.getEventManager().post(SpongeEventFactory.createChangeServiceProviderEvent(Cause.source(container).build(),
+                this.providers.get(service), Optional.ofNullable(oldProvider)));
     }
+
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> Optional<T> provide(Class<T> service) {
         checkNotNull(service, "service");
-        @Nullable Provider provider = providers.get(service);
-        return provider != null ? (Optional<T>) Optional.of(provider.provider) : Optional.<T>absent();
+        @Nullable ProviderRegistration<T> provider = (ProviderRegistration<T>) this.providers.get(service);
+        return provider != null ? Optional.of(provider.getProvider()) : Optional.empty();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> Optional<ProviderRegistration<T>> getRegistration(Class<T> service) {
+        return Optional.ofNullable((ProviderRegistration) this.providers.get(service));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T provideUnchecked(Class<T> service) throws ProvisioningException {
         checkNotNull(service, "service");
-        @Nullable Provider provider = providers.get(service);
+        @Nullable ProviderRegistration<T> provider = (ProviderRegistration<T>) this.providers.get(service);
         if (provider != null) {
-            return (T) provider.provider;
+            return provider.getProvider();
         } else {
             throw new ProvisioningException("No provider is registered for the service '" + service.getName() + "'", service);
         }
     }
 
-    private static class Provider {
-        private final PluginContainer container;
-        private final Object provider;
+    private static class Provider<T> implements ProviderRegistration<T> {
 
-        private Provider(PluginContainer container, Object provider) {
+        @SuppressWarnings("unused")
+        private final PluginContainer container;
+        private final Class<T> service;
+        private final T provider;
+
+        Provider(PluginContainer container, Class<T> service, T provider) {
             this.container = container;
+            this.service = service;
             this.provider = provider;
+        }
+
+        @Override
+        public Class<T> getService() {
+            return this.service;
+        }
+
+        @Override
+        public T getProvider() {
+            return this.provider;
+        }
+
+        @Override
+        public PluginContainer getPlugin() {
+            return this.container;
         }
     }
 

@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,12 +24,15 @@
  */
 package org.spongepowered.api.text.chat;
 
+import org.spongepowered.api.CatalogType;
+import org.spongepowered.api.util.annotation.CatalogedBy;
+
 /**
- * A chat type represents one of the positions that a chat message can be sent
- * to. Please see the <a href="http://wiki.vg/Protocol#Chat_Message">the chat
- * message packet</a> for a description of the packet. A list of available chat
- * types in Minecraft is available in {@link ChatTypes}.
+ * Represents the type of chat a message can be sent to.
+ *
+ * @see ChatTypes
  */
-public interface ChatType {
+@CatalogedBy(ChatTypes.class)
+public interface ChatType extends CatalogType {
 
 }

@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,8 +24,8 @@
  */
 package org.spongepowered.api.entity.vehicle.minecart;
 
+import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.math.Vector3d;
 
 /**
  * Represents a Minecart entity.
@@ -33,76 +33,80 @@ import org.spongepowered.api.math.Vector3d;
 public interface Minecart extends Entity {
 
     /**
-     * Gets whether or not the minecart is
-     * currently on a valid rail block.
+     * Gets whether or not the minecart is currently on a valid rail block.
      *
      * @return If the cart is on a rail
      */
     boolean isOnRail();
 
     /**
-     * Gets the maximum speed that this cart is
-     * allowed to travel at.
+     * Gets the absolute maximum speed that this cart is allowed to travel at.
      *
-     * Default value is 0.4
+     * <p>The default value is 0.4.</p>
      *
      * @return The maximum speed
      */
-    double getMaxSpeed();
+    double getSwiftness();
 
     /**
-     * Sets the maximum speed that this cart is
-     * allowed to travel at.
+     * Sets the absolute maximum speed that this cart is allowed to travel at.
      *
-     * Default value is 0.4
+     * <p>The default value is 0.4.</p>
      *
-     * @param maxSpeed The new max speed
+     * @param swiftness The new maximum speed
      */
-    void setMaxSpeed(double maxSpeed);
+    void setSwiftness(double swiftness);
 
     /**
-     * Gets whether or not the minecart slows down
-     * faster without a passenger.
+     * Gets the maximum speed that this cart is allowed to travel at the instant
+     * this method is called.
+     *
+     * <p>This differs from {@link Minecart#getSwiftness()} in that its value is
+     * affected by the block/rail beneath the cart. However, it is still
+     * impacted and limited by the cart's swiftness.</p>
+     *
+     * @return The maximum speed at which the minecart may travel at the instant
+     *     this method is called
+     */
+    double getPotentialMaxSpeed();
+
+    /**
+     * Gets whether or not the minecart slows down faster without a passenger.
      *
      * @return If the cart slows when empty
      */
     boolean doesSlowWhenEmpty();
 
     /**
-     * Sets whether or not the minecart slows down
-     * faster without a passenger.
+     * Sets whether or not the minecart slows down faster without a passenger.
      *
      * @param slowWhenEmpty If the cart should slow when emoty
      */
     void setSlowWhenEmpty(boolean slowWhenEmpty);
 
     /**
-     * Gets the velocity modifier applied when the
-     * minecart is airborne.
+     * Gets the velocity modifier applied when the minecart is airborne.
      *
      * @return Airborne velocity modifier
      */
     Vector3d getAirborneVelocityMod();
 
     /**
-     * Sets the velocity modifier applied when the
-     * minecart is airborne.
+     * Sets the velocity modifier applied when the minecart is airborne.
      *
      * @param airborneVelocityMod The new airborne velocity modifier
      */
     void setAirborneVelocityMod(Vector3d airborneVelocityMod);
 
     /**
-     * Gets the velocity modifier applied when the
-     * minecart is not on rails.
+     * Gets the velocity modifier applied when the minecart is not on rails.
      *
      * @return Derailed velocity modifier
      */
     Vector3d getDerailedVelocityMod();
 
     /**
-     * Sets the velocity modifier applied when the
-     * minecart is not on rails.
+     * Sets the velocity modifier applied when the minecart is not on rails.
      *
      * @param derailedVelocityMod The new derailed velocity modifier
      */

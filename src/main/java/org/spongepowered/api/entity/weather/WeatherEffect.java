@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,6 +24,9 @@
  */
 package org.spongepowered.api.entity.weather;
 
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.ExpirableData;
+import org.spongepowered.api.data.value.mutable.MutableBoundedValue;
 import org.spongepowered.api.entity.Entity;
 
 /**
@@ -31,4 +34,36 @@ import org.spongepowered.api.entity.Entity;
  */
 public interface WeatherEffect extends Entity {
 
+    /**
+     * Returns whether this weather effect is an effect and doesn't deal damage.
+     *
+     * @return Whether this weather effect is an effect
+     */
+    boolean isEffect();
+
+    /**
+     * Sets whether this weather effect is an effect and doesn't deal damage.
+     *
+     * @param effect Whether this weather effect is an effect
+     */
+    void setEffect(boolean effect);
+
+    /**
+     * Gets a copy of the {@link ExpirableData} for this weather entity.
+     *
+     * @return A copy of the expirable data
+     */
+    default ExpirableData getExpiringData() {
+        return get(ExpirableData.class).get();
+    }
+
+    /**
+     * Gets the {@link MutableBoundedValue} for the amount of "ticks"
+     * remaining before the "expiration" occurs.
+     *
+     * @return The immutable bounded value for the amount of ticks remaining
+     */
+    default MutableBoundedValue<Integer> expireTicks() {
+        return getValue(Keys.EXPIRATION_TICKS).get();
+    }
 }

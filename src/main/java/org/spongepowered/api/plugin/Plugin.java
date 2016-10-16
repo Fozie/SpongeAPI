@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,27 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.plugin;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import org.spongepowered.plugin.meta.SpongeExtension;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.util.regex.Pattern;
 
 /**
- * An annotation used to describe and mark a Sponge plugin
+ * An annotation used to describe and mark a Sponge plugin.
  */
-@Target(TYPE)
-@Retention(RUNTIME)
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 public @interface Plugin {
+
+    Pattern ID_PATTERN = SpongeExtension.ID_PATTERN;
 
     /**
      * An ID for the plugin to be used internally. The ID should be unique as to
      * not conflict with other plugins.
      *
-     * @return A unique identifier
+     * <p>The plugin ID must be lowercase and start with a alphabetic character.
+     * It may only contain alphanumeric characters, dashes or underscores.</p>
+     *
+     * @return The plugin identifier
+     * @see <a href="https://goo.gl/MRRYSJ">Java package naming conventions</a>
      */
     String id();
 
@@ -50,37 +57,43 @@ public @interface Plugin {
      * The human readable name of the plugin as to be used in descriptions and
      * similar things.
      *
-     * @return The human readable name of the plugin
+     * @return The plugin name, or an empty string if unknown
      */
-    String name();
+    String name() default "";
 
     /**
      * The version of the plugin.
      *
-     * @return The version of the plugin
+     * @return The plugin version, or an empty string if unknown
      */
-    String version() default "unknown";
+    String version() default "";
 
     /**
-     * A simple dependency string for this mod separated by a ";"
-     * example:
-     * <pre>"required-after:Sponge@[1.2.3.2222,);required-after:myLibraryPlugin;after:towny;before:worldguard"</pre>
-     * supported options:
-     * <dl>
-     *   <dt>after</dt>
-     *   <dd>when present this plugin will run after plugin x</dd>
-     *   <dt>required-after</dt>
-     *   <dd>plugin x must be present, load after plugin x</dd>
-     *   <dt>before</dt>
-     *   <dd>when present run before plugin x</dd>
-     *   <dt>required-before</dt>
-     *   <dd>plugin x must be present, load before plugin x</dd>
-     * </dl>
-     * supports maven version ranges after @ in any field
+     * The dependencies required to load <strong>before</strong> this plugin.
      *
-     * @return A specially formatted list of dependencies
+     * @return The plugin dependencies
      */
-    String dependencies() default "";
+    Dependency[] dependencies() default {};
 
+    /**
+     * The description of the plugin, explaining what it can be used for.
+     *
+     * @return The plugin description, or an empty string if unknown
+     */
+    String description() default "";
+
+    /**
+     * The URL or website of the plugin.
+     *
+     * @return The plugin url, or an empty string if unknown
+     */
+    String url() default "";
+
+    /**
+     * The authors of the plugin.
+     *
+     * @return The plugin authors, or empty if unknown
+     */
+    String[] authors() default {};
 
 }

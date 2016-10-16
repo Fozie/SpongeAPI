@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,60 +24,89 @@
  */
 package org.spongepowered.api.text.format;
 
-import com.google.common.base.Optional;
-
-import java.util.List;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.util.Color;
+import org.spongepowered.api.util.generator.dummy.DummyObjectProvider;
 
 /**
- * TextColors is a list of the default text colors that Minecraft provides. The
- * values are filled in by mixins in Sponge at runtime.
+ * TextColors is a list of text colors provided by Vanilla Minecraft.
  */
 public final class TextColors {
 
     private TextColors() {
     }
 
-    public static final TextColor.Base BLACK = null;
-    public static final TextColor.Base DARK_BLUE = null;
-    public static final TextColor.Base DARK_GREEN = null;
-    public static final TextColor.Base DARK_AQUA = null;
-    public static final TextColor.Base DARK_RED = null;
-    public static final TextColor.Base DARK_PURPLE = null;
-    public static final TextColor.Base GOLD = null;
-    public static final TextColor.Base GRAY = null;
-    public static final TextColor.Base DARK_GRAY = null;
-    public static final TextColor.Base BLUE = null;
-    public static final TextColor.Base GREEN = null;
-    public static final TextColor.Base AQUA = null;
-    public static final TextColor.Base RED = null;
-    public static final TextColor.Base LIGHT_PURPLE = null;
-    public static final TextColor.Base YELLOW = null;
-    public static final TextColor.Base WHITE = null;
+    /**
+     * Represents a base color that is used as default if no color is specified.
+     * This will result in either the default color of the receiver or inherit
+     * it from a parent {@link Text}.
+     */
+    public static final TextColor NONE = new TextColor() {
+
+        private final Color color = Color.BLACK;
+
+        @Override
+        public String getName() {
+            return "NONE";
+        }
+
+        @Override
+        public Color getColor() {
+            return this.color;
+        }
+
+        @Override
+        public String getId() {
+            return "NONE";
+        }
+
+        @Override
+        public String toString() {
+            return getId();
+        }
+
+    };
+
+    // SORTFIELDS:ON
+
+    public static final TextColor AQUA = DummyObjectProvider.createFor(TextColor.class, "AQUA");
+
+    public static final TextColor BLACK = DummyObjectProvider.createFor(TextColor.class, "BLACK");
+
+    public static final TextColor BLUE = DummyObjectProvider.createFor(TextColor.class, "BLUE");
+
+    public static final TextColor DARK_AQUA = DummyObjectProvider.createFor(TextColor.class, "DARK_AQUA");
+
+    public static final TextColor DARK_BLUE = DummyObjectProvider.createFor(TextColor.class, "DARK_BLUE");
+
+    public static final TextColor DARK_GRAY = DummyObjectProvider.createFor(TextColor.class, "DARK_GRAY");
+
+    public static final TextColor DARK_GREEN = DummyObjectProvider.createFor(TextColor.class, "DARK_GREEN");
+
+    public static final TextColor DARK_PURPLE = DummyObjectProvider.createFor(TextColor.class, "DARK_PURPLE");
+
+    public static final TextColor DARK_RED = DummyObjectProvider.createFor(TextColor.class, "DARK_RED");
+
+    public static final TextColor GOLD = DummyObjectProvider.createFor(TextColor.class, "GOLD");
+
+    public static final TextColor GRAY = DummyObjectProvider.createFor(TextColor.class, "GRAY");
+
+    public static final TextColor GREEN = DummyObjectProvider.createFor(TextColor.class, "GREEN");
+
+    public static final TextColor LIGHT_PURPLE = DummyObjectProvider.createFor(TextColor.class, "LIGHT_PURPLE");
+
+    public static final TextColor RED = DummyObjectProvider.createFor(TextColor.class, "RED");
 
     /**
      * Resets the current color to the default one on the client. In most cases
-     * this will be the same as {@link #WHITE}.
+     * this should be the same as {@link #WHITE}.
      */
-    public static final TextColor.Base RESET = null;
+    public static final TextColor RESET = DummyObjectProvider.createFor(TextColor.class, "RESET");
 
-    /**
-     * Gets the {@link TextColor} with the specified name.
-     *
-     * @param name The identifier of the text colors, for example "DARK_BLUE"
-     * @return The {@link TextColor} with the specified name, or
-     *         {@link Optional#absent()} if not found
-     */
-    public static Optional<TextColor> valueOf(String name) {
-        return TextStyles.factory.getColorFromName(name);
-    }
+    public static final TextColor WHITE = DummyObjectProvider.createFor(TextColor.class, "WHITE");
 
-    /**
-     * Returns a list of all available {@link TextColor}s on this server.
-     *
-     * @return An immutable list of all text colors
-     */
-    public static List<TextColor> getValues() {
-        return TextStyles.factory.getColors();
-    }
+    public static final TextColor YELLOW = DummyObjectProvider.createFor(TextColor.class, "YELLOW");
+
+    // SORTFIELDS:OFF
 
 }

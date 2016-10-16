@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,22 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api;
 
-import com.google.common.base.Optional;
-import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.asset.AssetManager;
+import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.config.ConfigManager;
+import org.spongepowered.api.data.DataManager;
+import org.spongepowered.api.data.DataSerializable;
+import org.spongepowered.api.data.persistence.DataBuilder;
+import org.spongepowered.api.data.property.PropertyRegistry;
+import org.spongepowered.api.data.property.PropertyStore;
+import org.spongepowered.api.event.EventManager;
+import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.plugin.PluginManager;
+import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.service.ServiceManager;
-import org.spongepowered.api.service.command.CommandService;
-import org.spongepowered.api.service.event.EventManager;
-import org.spongepowered.api.service.scheduler.Scheduler;
-import org.spongepowered.api.text.message.Message;
-import org.spongepowered.api.text.title.Title;
-import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.TeleportHelper;
 
-import java.util.Collection;
-import java.util.UUID;
+import java.nio.file.Path;
 
 /**
  * The core accessor of the API. The implementation uses this to pass
@@ -46,12 +49,27 @@ import java.util.UUID;
 public interface Game {
 
     /**
-     * Returns the {@link Platform} the implementation
-     * is executing from.
+     * Returns the current platform, or implementation, this {@link Game} is running on.
      *
-     * @return The platform
+     * @return The current implementation
      */
     Platform getPlatform();
+
+    /**
+     * Returns if the {@link Server} is available for use. The result of this method is entirely
+     * dependent on the implementation.
+     *
+     * @return True if the Server is available, false if not
+     */
+    boolean isServerAvailable();
+
+    /**
+     * Gets the {@link Server}.
+     *
+     * @throws IllegalStateException If the Server isn't currently available
+     * @return The server
+     */
+    Server getServer();
 
     /**
      * Gets the {@link PluginManager}.
@@ -68,6 +86,13 @@ public interface Game {
     EventManager getEventManager();
 
     /**
+     * Gets the {@link AssetManager}.
+     *
+     * @return The asset manager
+     */
+    AssetManager getAssetManager();
+
+    /**
      * Gets the {@link GameRegistry}.
      *
      * @return The game registry
@@ -75,7 +100,14 @@ public interface Game {
     GameRegistry getRegistry();
 
     /**
-     * Get the game's instance of the service manager, which is the gateway
+     * Retrieves the GameDictionary (item dictionary) for this GameRegistry.
+     *
+     * @return The item dictionary
+     */
+    GameDictionary getGameDictionary();
+
+    /**
+     * Gets the game's instance of the service manager, which is the gateway
      * to various services provided by Sponge (command registration and so on).
      *
      * <p>Services registered by other plugins may be available too.</p>
@@ -85,97 +117,89 @@ public interface Game {
     ServiceManager getServiceManager();
 
     /**
-     * Gets the {@link Scheduler}.
+     * Gets the scheduler used to schedule tasks.
      *
      * @return The scheduler
      */
     Scheduler getScheduler();
 
     /**
-     * Get the command dispatcher used for registering and dispatching
+     * Gets the {@link DataManager} instance to register
+     * {@link DataSerializable}s, and get the related {@link DataBuilder}s.
+     *
+     * @return The serialization service
+     */
+    DataManager getDataManager();
+
+    /**
+     * Gets the {@link PropertyRegistry} instance to register
+     * {@link PropertyStore}s.
+     *
+     * @return The property registry
+     */
+    PropertyRegistry getPropertyRegistry();
+
+    /**
+     * Gets the command dispatcher used for registering and dispatching
      * registered commands.
      *
      * @return The command dispatcher
      */
-    CommandService getCommandDispatcher();
+    CommandManager getCommandManager();
 
     /**
-     * Gets the {@link Player}s currently online
-     *
-     * @return A {@link Collection} of online players
+     * Gets the {@link TeleportHelper}, used to find safe {@link Location}s.
+     * @return The teleport helper
      */
-    Collection<Player> getOnlinePlayers();
+    TeleportHelper getTeleportHelper();
 
     /**
-     * Gets the max players allowed on this server
+     * Gets the {@link ConfigManager} used to load and manage configuration files
+     * for plugins.
      *
-     * @return Maximum number of connected players
+     * @return The configuration manager
      */
-    int getMaxPlayers();
+    ConfigManager getConfigManager();
 
     /**
-     * Gets a {@link Player} by their unique id
+     * Gets the directory where the game's files are located.
      *
-     * @param uniqueId The UUID to get the player from
-     * @return {@link Player} if available
+     * @return The game directory
      */
-    Optional<Player> getPlayer(UUID uniqueId);
+    Path getGameDirectory();
 
     /**
-     * Gets a {@link Player} by their name
+     * Gets the directory where the game will store save files.
      *
-     * This only works for online players.
+     * This location differs based on the implementation and is therefore implementation-specific.
      *
-     * <b>Note: Do not use names for persistent storage, the
-     * Zidane of today may not be the Zidane of yesterday.</b>
+     * <p>
+     *     To elaborate, this is how it is handled in Minecraft based on side:
+     *     <ul>
+     *         <li>Client
+     *          <ul>This directory will point to {@link Game#getGameDirectory()}.resolve("saves").resolve(currentSaveName)</ul>
+     *         <li>Server
+     *          <ul>This directory will be equivalent to {@link Game#getGameDirectory()}.resolve(level-name).</ul>
+     *     </ul>
+     *     Consult your specific implementation if they support placing this elsewhere.
+     * </p>
      *
-     * @param name The name to get the player from
-     * @return {@link Player} if available
+     * @return The saves directory
      */
-    Optional<Player> getPlayer(String name);
+    Path getSavesDirectory();
 
     /**
-     * Gets all currently loaded {@link World}s.
+     * Gets the current {@link GameState} that this game is currently in.
      *
-     * @return Collection of loaded worlds
+     * @return The game state
      */
-    Collection<World> getWorlds();
+    GameState getState();
 
     /**
-     * Gets a loaded {@link World} by its unique id ({@link UUID}).
+     * Gets the {@link ChannelRegistrar} for creating network channels.
      *
-     * @param uniqueId UUID to lookup
-     * @return The world or null if not found
+     * @return The channel registrar
      */
-    World getWorld(UUID uniqueId);
-
-    /**
-     * Gets a loaded {@link World} by name
-     *
-     * @param worldName Name to lookup
-     * @return The world or null if not found
-     */
-    World getWorld(String worldName);
-
-    /**
-     * Sends the given message to all online players
-     *
-     * @param message The message to send
-     */
-    void broadcastMessage(Message<?> message);
-
-    /**
-     * Gets the API version.
-     *
-     * @return The API version
-     */
-    String getAPIVersion();
-
-    /**
-     * Gets the implementation version.
-     *
-     * @return The implementation version
-     */
-    String getImplementationVersion();
+    ChannelRegistrar getChannelRegistrar();
 
 }

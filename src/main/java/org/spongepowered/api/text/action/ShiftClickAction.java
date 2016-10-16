@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,22 +24,43 @@
  */
 package org.spongepowered.api.text.action;
 
+import org.spongepowered.api.text.Text;
+
 /**
- * A ShiftClickAction is a TextAction that responds to shift-clicks. Currently
- * the only value is InsertText, which maps to the insertion field in Message
- * JSON. This is because of the way that there is no actual shiftClickEvent
- * field in the raw message JSON. Possibly more shift click actions will be
- * added to the client in the future.
+ * Represents a {@link TextAction} that responds to shift-clicks.
  *
  * @param <R> the type of the result of the action
  */
-public interface ShiftClickAction<R> extends TextAction<R> {
+public abstract class ShiftClickAction<R> extends TextAction<R> {
+
+    /**
+     * Constructs a new {@link ShiftClickAction} with the given result.
+     *
+     * @param result The result of the shift click action
+     */
+    ShiftClickAction(R result) {
+        super(result);
+    }
+
+    @Override
+    public void applyTo(Text.Builder builder) {
+        builder.onShiftClick(this);
+    }
 
     /**
      * Inserts some text into the chat prompt.
      */
-    interface InsertText extends ShiftClickAction<String> {
+    public static final class InsertText extends ShiftClickAction<String> {
+
+        /**
+         * Constructs a new {@link InsertText} instance that will insert text at
+         * the current cursor position in the chat when it is shift-clicked.
+         *
+         * @param text The text to insert
+         */
+        InsertText(String text) {
+            super(text);
+        }
 
     }
-
 }

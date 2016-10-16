@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,27 +24,48 @@
  */
 package org.spongepowered.api.entity.living.monster;
 
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.ElderData;
+import org.spongepowered.api.data.value.mutable.Value;
+import org.spongepowered.api.entity.living.Aquatic;
+import org.spongepowered.api.entity.living.Living;
+
+import java.util.Optional;
+
 /**
  * Represents a Guardian.
  */
-public interface Guardian extends Monster {
+public interface Guardian extends Aquatic, Monster {
 
     /**
-     * Checks if this guardian is an elder or not.
-     * <p>Elder guardians may have higher health, attack damage,
-     * and other drop items.</p>
+     * Gets the {@link ElderData} for the "elder" state.
      *
-     * @return True if this is an elder guardian
+     * @return The elder data manipulator
      */
-    boolean isElder();
+    default ElderData getElderData() {
+        return get(ElderData.class).get();
+    }
 
     /**
-     * Sets whether this guardian is an elder.
-     * <p>Elder guardians may have higher health, attack damage, and
-     * other item drops.</p>
+     * Gets the {@link Value} for the "elder" state.
      *
-     * @param elder Whether this guardian is an elder or not
+     * @return The value for the elder state
      */
-    void setElder(boolean elder);
+    default Value<Boolean> elder() {
+        return getValue(Keys.ELDER_GUARDIAN).get();
+    }
 
+    /**
+     * Gets the target of the guardian's beam or {@link Optional#empty()} otherwise.
+     *
+     * @return An optional containing the target, if any
+     */
+    Optional<Living> getBeamTarget();
+
+    /**
+     * Sets the target of the guardian's beam. Setting a null value removes the target.
+     *
+     * @param entity The entity or null to clear it
+     */
+    void setBeamTarget(Living entity);
 }

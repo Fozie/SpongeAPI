@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,15 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.plugin;
 
-import com.google.common.base.Optional;
 import org.slf4j.Logger;
 
 import java.util.Collection;
+import java.util.Optional;
 
+/**
+ * The manager that manages plugins. This manager can retrieve
+ * {@link PluginContainer}s from {@link Plugin} instances, getting
+ * {@link Logger}s, etc.
+ */
 public interface PluginManager {
+
+    String MINECRAFT_PLUGIN_ID = "minecraft";
+    String SPONGE_PLUGIN_ID = "sponge";
 
     /**
      * Get the plugin container from an instance.
@@ -49,18 +56,19 @@ public interface PluginManager {
     Optional<PluginContainer> getPlugin(String id);
 
     /**
-     * Gets the {@link Logger} for the {@link PluginContainer}.
-     *
-     * @param plugin The plugin
-     * @return The logger
-     */
-    Logger getLogger(PluginContainer plugin);
-
-    /**
-     * Gets a {@link Collection} of all {@link PluginContainer}s
+     * Gets a {@link Collection} of all {@link PluginContainer}s.
      *
      * @return The plugins
      */
     Collection<PluginContainer> getPlugins();
+
+    /**
+     * Checks if a plugin is loaded based on its ID.
+     * This may contain plugins/mods from other systems in some implementations.
+     *
+     * @param id the id of the {@link Plugin}
+     * @return {@code true} if loaded {@code false} if not loaded.
+     */
+    boolean isLoaded(String id);
 
 }

@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,13 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.entity.living.complex;
 
-import com.google.common.base.Optional;
 import org.spongepowered.api.entity.EnderCrystal;
-import org.spongepowered.api.entity.living.Agent;
+import org.spongepowered.api.entity.living.Aerial;
+import org.spongepowered.api.entity.living.monster.Boss;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -36,22 +36,16 @@ import javax.annotation.Nullable;
 /**
  * Represents an Ender Dragon.
  */
-public interface EnderDragon extends ComplexLiving, Agent {
+public interface EnderDragon extends ComplexLiving, Boss, Aerial {
 
     @Override
     Set<EnderDragonPart> getParts();
-
+    
     /**
-     * Gets the ender crystal healing this Ender Dragon.
-     *
-     * @return The crystal, if available
+     * Returns the current {@code EnderCrystal} that is healing this ender dragon.
+     * 
+     * @return The ender crystal
      */
     Optional<EnderCrystal> getHealingCrystal();
 
-    /**
-     * Sets the ender crystal curretly healing this dragon.
-     *
-     * @param crystal The crystal to heal this dragon
-     */
-    void setHealingCrystal(@Nullable EnderCrystal crystal);
 }

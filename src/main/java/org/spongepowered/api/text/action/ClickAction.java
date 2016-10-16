@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,41 +24,117 @@
  */
 package org.spongepowered.api.text.action;
 
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.text.Text;
+
 import java.net.URL;
+import java.util.function.Consumer;
 
 /**
- * A ClickAction is a TextAction that responds to clicks.
+ * Represents a {@link TextAction} that responds to clicks.
  *
- * @param <R> the type of the result of the action
+ * @param <R> The type of the result of the action
  */
-public interface ClickAction<R> extends TextAction<R> {
+public abstract class ClickAction<R> extends TextAction<R> {
+
+    /**
+     * Constructs a new {@link ClickAction} with the given result.
+     *
+     * @param result The result of the click action
+     */
+    ClickAction(R result) {
+        super(result);
+    }
+
+    @Override
+    public void applyTo(Text.Builder builder) {
+        builder.onClick(this);
+    }
 
     /**
      * Opens a url.
      */
-    interface OpenUrl extends ClickAction<URL> {
+    public static final class OpenUrl extends ClickAction<URL> {
+
+        /**
+         * Constructs a new {@link OpenUrl} instance that will ask the player to
+         * open an URL when it is clicked.
+         *
+         * @param url The url to open
+         */
+        OpenUrl(URL url) {
+            super(url);
+        }
 
     }
 
     /**
      * Runs a command.
      */
-    interface RunCommand extends ClickAction<String> {
+    public static final class RunCommand extends ClickAction<String> {
+
+        /**
+         * Constructs a new {@link RunCommand} instance that will run a command
+         * on the client when it is clicked.
+         *
+         * @param command The command to execute
+         */
+        RunCommand(String command) {
+            super(command);
+        }
 
     }
 
     /**
      * For books, changes pages.
      */
-    interface ChangePage extends ClickAction<Integer> {
+    public static final class ChangePage extends ClickAction<Integer> {
+
+        /**
+         * Constructs a new {@link ChangePage} instance that will change the
+         * page in a book when it is clicked.
+         *
+         * @param page The book page to switch to
+         */
+        ChangePage(int page) {
+            super(page);
+        }
 
     }
 
     /**
      * Suggests a command in the prompt.
      */
-    interface SuggestCommand extends ClickAction<String> {
+    public static final class SuggestCommand extends ClickAction<String> {
 
+        /**
+         * Constructs a new {@link SuggestCommand} instance that will suggest
+         * the player a command when it is clicked.
+         *
+         * @param command The command to suggest
+         */
+        SuggestCommand(String command) {
+            super(command);
+        }
+
+    }
+
+    /**
+     * Execute a callback.
+     */
+    public static final class ExecuteCallback extends ClickAction<Consumer<CommandSource>> {
+
+        /**
+         * Constructs a new {@link ExecuteCallback} that will execute the given
+         * runnable on the server when clicked. The callback will expire after
+         * some amount of time (not particularly instantly, but not like
+         * overnight really either).
+         *
+         * @param result The callback
+         */
+        ExecuteCallback(Consumer<CommandSource> result) {
+            super(result);
+        }
     }
 
 }

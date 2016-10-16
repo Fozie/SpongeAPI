@@ -12,7 +12,7 @@ dist
 lib
 out
 run
-target
+/target
 *.com
 *.class
 *.dll
@@ -64,7 +64,6 @@ Thumbs.db
 .idea
 .project
 .settings
-eclipse
 nbproject
 atlassian-ide-plugin.xml
 build.xml
@@ -72,3 +71,4 @@ nb-configuration.xml
 *.iml
 *.ipr
 *.iws
+*.launch

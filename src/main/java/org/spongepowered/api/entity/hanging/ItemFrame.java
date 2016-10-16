@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,28 +24,9 @@
  */
 package org.spongepowered.api.entity.hanging;
 
-import com.google.common.base.Optional;
-import org.spongepowered.api.item.inventory.ItemStack;
-
-import javax.annotation.Nullable;
-
 /**
  * Represents an ItemFrame.
  */
 public interface ItemFrame extends Hanging {
-
-    /**
-     * Gets the currently displayed Item.
-     *
-     * @return The currently displayed item, if available
-     */
-    Optional<ItemStack> getItem();
-
-    /**
-     * Sets the item to be displayed.
-     *
-     * @param item The item to be displayed
-     */
-    void setItem(@Nullable ItemStack item);
 
 }

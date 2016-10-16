@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +24,10 @@
  */
 package org.spongepowered.api.entity.hanging;
 
-import org.spongepowered.api.entity.hanging.art.Art;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.ArtData;
+import org.spongepowered.api.data.type.Art;
+import org.spongepowered.api.data.value.mutable.Value;
 
 /**
  * Represents a Painting.
@@ -32,17 +35,20 @@ import org.spongepowered.api.entity.hanging.art.Art;
 public interface Painting extends Hanging {
 
     /**
-     * Gets the currently displayed {@link Art} piece.
+     * Gets a copy of the {@link ArtData} represented by this {@link Painting}.
      *
-     * @return The currently displayed Art piece
+     * @return A copy of the art data
      */
-    Art getArt();
+    default ArtData getArtData() {
+        return get(ArtData.class).get();
+    }
 
     /**
-     * Sets this painting to display the designated Art piece.
+     * Gets the current {@link Art} value represented by this {@link Painting}.
      *
-     * @param art The art piece to display
+     * @return The current art value
      */
-    void setArt(Art art);
-
+    default Value<Art> art() {
+        return getValue(Keys.ART).get();
+    }
 }

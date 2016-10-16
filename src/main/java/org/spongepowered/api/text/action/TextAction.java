@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,30 +24,68 @@
  */
 package org.spongepowered.api.text.action;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import com.google.common.base.Objects;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.TextElement;
+
+import javax.annotation.Nullable;
+
 /**
- * A TextAction is something that happens as a response to some event on raw
- * text. In the Sponge API this is either a
- * {@link org.spongepowered.api.text.action.ClickAction click} or
- * {@link org.spongepowered.api.text.action.HoverAction hover}.
+ * Represents an action happening as a response to an event on a {@link Text}.
  *
- * @param <R> the type of the result of the action
+ * @param <R> The type of the result
+ *
+ * @see ClickAction
+ * @see HoverAction
+ * @see ShiftClickAction
  */
-public interface TextAction<R> {
+public abstract class TextAction<R> implements TextElement {
+
+    protected final R result;
 
     /**
-     * Returns the ID of this text action as represented in JSON.
+     * Constructs a new {@link TextAction} with the given result.
      *
-     * @return A String id
+     * @param result The result of the text action
      */
-    String getId();
+    protected TextAction(R result) {
+        this.result = checkNotNull(result, "result");
+    }
 
     /**
-     * Returns the result of this text action. This is an argument that gets
-     * passed into the text action in JSON, for instance, the URL in the OpenUrl
-     * click action.
+     * Returns the result of this {@link TextAction}.
      *
-     * @return A result
+     * @return The result
      */
-    R getResult();
+    public final R getResult() {
+        return this.result;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        TextAction<?> that = (TextAction<?>) o;
+        return this.result.equals(that.result);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.result.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .addValue(this.result)
+                .toString();
+    }
 
 }

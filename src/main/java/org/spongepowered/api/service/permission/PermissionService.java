@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,27 +22,101 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.service.permission;
 
-import com.google.common.annotations.Beta;
-import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.service.context.ContextualService;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+
 
 /**
- * Returns {@link Subject}s that can be used to test permission.
+ * Represents a provider for permissions. This is the interface that a
+ * permissions plugin must implement to provide permissions for a user.
  */
-public interface PermissionService {
+public interface PermissionService extends ContextualService<Subject> {
+
+    String SUBJECTS_USER = "user";
+    String SUBJECTS_GROUP = "group";
+    String SUBJECTS_SYSTEM = "system";
+    String SUBJECTS_COMMAND_BLOCK = "commandblock";
+    String SUBJECTS_ROLE_TEMPLATE = "role-template";
 
     /**
-     * Return a subject for the given player.
+     * Returns the permissions level that describes users. User identifiers are
+     * expected to be UUIDs in RFC4122 string format (This *does* have dashes.
+     * Mojang is stupid).
      *
-     * <p>This method is subject to change because some sort of
-     * "user" object may be introduced.</p>
-     *
-     * @param player The player
-     * @return A subject
+     * @return A subject collection for users
      */
-    @Beta
-    Subject login(Player player);
+    SubjectCollection getUserSubjects();
+
+    /**
+     * Returns the collection of group subjects available.
+     *
+     * @return A collection managing group subjects
+     */
+    SubjectCollection getGroupSubjects();
+
+    /**
+     * Get the subject holding data that is applied by default to all subjects. This
+     * subject is at the root of all inheritance trees, above even subject type-specific
+     * defaults, meaning it has the lowest priority when all other weighting is equal.
+     *
+     * <p>Note: This data should be persisted, so plugins that add permissions to this subject
+     * must take care to not override permissions already set or modified. It is also
+     * recommended to use {@link Subject#getTransientSubjectData()} where possible to
+     * avoid persisting unnecessary data.
+     *
+     * @return The default subject data
+     */
+    Subject getDefaults();
+
+    /**
+     * Returns a subject collection with the given identifier.
+     *
+     * @param identifier The identifier
+     * @return a subject collection for this type of subject
+     */
+    SubjectCollection getSubjects(String identifier);
+
+    /**
+     * Returns an immutable copy of the mapping of all subject collections
+     * stored by this permission service.
+     *
+     * @return The known subjects for this map
+     */
+    Map<String, SubjectCollection> getKnownSubjects();
+
+    /**
+     * Creates a new description builder for the given plugin's permission. May
+     * return {@link Optional#empty()} if the service does not support
+     * {@link PermissionDescription}s.
+     *
+     * @param plugin The plugin to create permission descriptions for
+     * @return The newly created permission description builder, if supported
+     */
+    Optional<PermissionDescription.Builder> newDescriptionBuilder(Object plugin);
+
+    /**
+     * Gets the registered or generated {@link PermissionDescription} for the
+     * given permission if available. If the given permission is not defined
+     * itself this might also return the associated permission template.
+     *
+     * @param permission The permission to get the description for
+     * @return The description for the given permission or
+     *         {@link Optional#empty()}
+     */
+    Optional<PermissionDescription> getDescription(String permission);
+
+    /**
+     * Gets a immutable collection containing all registered or generated
+     * {@link PermissionDescription}s.
+     *
+     * @return An immutable collection contain all registered or generated
+     *         descriptions
+     */
+    Collection<PermissionDescription> getDescriptions();
 
 }

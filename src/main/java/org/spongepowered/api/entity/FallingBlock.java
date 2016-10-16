@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,6 +25,9 @@
 package org.spongepowered.api.entity;
 
 import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.FallingBlockData;
+import org.spongepowered.api.data.value.mutable.Value;
 
 /**
  * Represents a falling block. A falling block may harm entities where it
@@ -33,48 +36,42 @@ import org.spongepowered.api.block.BlockState;
 public interface FallingBlock extends Entity {
 
     /**
-     * Gets the current fall damage per block fallen.
+     * Gets a copy of the currently used {@link FallingBlockData}.
      *
-     * @return The current fall damage per block
+     * @return A copy of the currently used falling block data
      */
-    double getFallDamagePerBlock();
+    default FallingBlockData getFallingBlockData() {
+        return get(FallingBlockData.class).get();
+    }
 
     /**
-     * Sets the fall damage per block.
+     * Gets the {@link Value} for the damage to deal per block
+     * the {@link FallingBlock} has fallen.
      *
-     * @param damage The fall damage per block
+     * @return The immutable value for the damage per block of falling
      */
-    void setFallDamagePerBlock(double damage);
+    default Value<Double> fallDamagePerBlock() {
+        return getValue(Keys.FALL_DAMAGE_PER_BLOCK).get();
+    }
 
     /**
-     * Gets the maximum damage this block can deal to another entity
-     * for falling on the entity.
+     * Gets the maximum damage the {@link FallingBlock} can deal to another
+     * entity for falling on the entity.
      *
-     * @return The maximum damage this block can deal
+     * @return The maximum damage the block can deal
      */
-    double getMaxFallDamage();
+    default Value<Double> maxFallDamage() {
+        return getValue(Keys.MAX_FALL_DAMAGE).get();
+    }
 
     /**
-     * Sets the maximum damage this block can deal to another entity
-     * for falling on the entity.
-     *
-     * @param damage The maximum damage this block can deal
-     */
-    void setMaxFallDamage(double damage);
-
-    /**
-     * Gets the {@link BlockState} this falling block is representing.
+     * Gets the {@link BlockState} the falling block is representing.
      *
      * @return The falling block's block state
      */
-    BlockState getBlockState();
-
-    /**
-     * Sets the block state for this falling block.
-     *
-     * @param blockState The block state of this falling block
-     */
-    void setBlockState(BlockState blockState);
+    default Value<BlockState> blockState() {
+        return getValue(Keys.FALLING_BLOCK_STATE).get();
+    }
 
     /**
      * Gets whether this falling block will try to place itself where
@@ -82,15 +79,9 @@ public interface FallingBlock extends Entity {
      *
      * @return True if this block will attempt to place itself when it lands
      */
-    boolean getCanPlaceAsBlock();
-
-    /**
-     * Sets whether this falling block can be placed as a block when it lands.
-     *
-     * @param placeable Whether this falling block will attempt to place
-     *                  itself when it lands
-     */
-    void setCanPlaceAsBlock(boolean placeable);
+    default Value<Boolean> canPlaceAsBlock() {
+        return getValue(Keys.CAN_PLACE_AS_BLOCK).get();
+    }
 
     /**
      * Gets whether this falling block can drop as an item if it lands in a
@@ -98,14 +89,25 @@ public interface FallingBlock extends Entity {
      *
      * @return Whether this falling block can drop as an item
      */
-    boolean getCanDropAsItem();
+    default Value<Boolean> canDropAsItem() {
+        return getValue(Keys.CAN_DROP_AS_ITEM).get();
+    }
 
     /**
-     * Sets whether this falling block will drop as an item if it lands in a
-     * way that it can not be placed.
+     * Gets the time the block has been falling. Defaults to a value of 1.
      *
-     * @param droppable Whether this falling block will drop as an item
+     * @return The time the block has been falling
      */
-    void setCanDropAsItem(boolean droppable);
+    default Value<Integer> fallTime() {
+        return getValue(Keys.FALL_TIME).get();
+    }
 
+    /**
+     * Gets whether this falling block will damage entities where it lands
+     *
+     * @return Whether this falling block will damage entities where it lands
+     */
+    default Value<Boolean> canHurtEntities() {
+        return getValue(Keys.FALLING_BLOCK_CAN_HURT_ENTITIES).get();
+    }
 }

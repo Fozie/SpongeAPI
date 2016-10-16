@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,11 +26,13 @@ package org.spongepowered.api.entity;
 
 import org.spongepowered.api.util.Identifiable;
 
+/**
+ * Represents an entity which may tame other entities.
+ */
 public interface Tamer extends Identifiable {
 
     /**
-     * Gets the name of this tamer to reference on tamed entities or null
-     * if it cannot be obtained.
+     * Gets the name of this tamer to reference on tamed entities.
      *
      * @return The name to reference this tamer
      */

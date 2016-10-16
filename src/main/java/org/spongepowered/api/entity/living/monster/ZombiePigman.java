@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,8 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.entity.living.monster;
+
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.AngerableData;
+import org.spongepowered.api.data.value.mutable.MutableBoundedValue;
 
 /**
  * Represents a Zombie Pigman.
@@ -31,21 +34,16 @@ package org.spongepowered.api.entity.living.monster;
 public interface ZombiePigman extends Zombie {
 
     /**
-     * Gets the current anger level.
-     * <p>Angry Zombie Pigmen may attempt to start attacking nearby
-     * entities.</p>
+     * Gets a copy of the {@link AngerableData} for this {@link ZombiePigman}.
      *
-     * @return The current anger level for this zombie pigman
+     * @return A copy of the anger data for this pigman
      */
-    int getAngerLevel();
+    default AngerableData getAngerData() {
+        return get(AngerableData.class).get();
+    }
 
-    /**
-     * Sets the anger level for this zombie pigman.
-     * <p>Angry Zombie Pigmen may attempt to start attacking nearby
-     * entities.</p>
-     *
-     * @param angerLevel The new anger level
-     */
-    void setAngerLevel(int angerLevel);
+    default MutableBoundedValue<Integer> angerLevel() {
+        return getValue(Keys.ANGER).get();
+    }
 
 }

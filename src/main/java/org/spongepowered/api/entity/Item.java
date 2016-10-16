@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,10 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.entity;
 
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.RepresentedItemData;
+import org.spongepowered.api.data.value.mutable.Value;
+import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 
 /**
  * Represents an Item entity.
@@ -33,9 +37,32 @@ import org.spongepowered.api.item.inventory.ItemStack;
 public interface Item extends Entity {
 
     /**
-     * Get the {@link ItemStack} that this entity represents.
+     * Gets a copy of the current {@link RepresentedItemData} this item is
+     * representing.
      *
-     * @return The represented {@link ItemStack}
+     * @return A copy of the represented item data
      */
-    ItemStack getItemStack();
+    default RepresentedItemData getItemData() {
+        return get(RepresentedItemData.class).get();
+    }
+
+    /**
+     * Gets the {@link Value} for the represented {@link ItemStack} as
+     * an {@link ItemStackSnapshot}.
+     *
+     * @return The value for the item stack snapshot
+     */
+    default Value<ItemStackSnapshot> item() {
+        return getValue(Keys.REPRESENTED_ITEM).get();
+    }
+
+    /**
+     * Gets the {@link ItemType} represented by this {@link Item} entity.
+     *
+     * @return The item type
+     */
+    default ItemType getItemType() {
+        return item().get().getType();
+    }
+
 }

@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,10 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.service;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 /**
  * A manager of services and their providers.
@@ -44,11 +43,7 @@ public interface ServiceManager {
     /**
      * Register a provider with the service manager.
      *
-     * <p>If a provider already exists for the given service, it will be
-     * replaced if was flagged as replaceable. Otherwise, a
-     * {@link ProviderExistsException} will be thrown. Plugins should provide
-     * options to not install their providers if the plugin is not dedicated
-     * to a single function (such as purely authorization).</p>
+     * <p>Services are by definition replaceable at any given time.</p>
      *
      * <p>Services should only be registered during initialization. If services
      * are registered later, then they may not be utilized.</p>
@@ -57,11 +52,10 @@ public interface ServiceManager {
      * @param service The service
      * @param provider The implementation
      * @param <T> The type of service
-     * @throws ProviderExistsException Thrown if a provider already exists
-     *                                 and cannot be replaced
-     * @throws IllegalArgumentException Thrown if {@code plugin} is not a plugin instance
+     * @throws IllegalArgumentException Thrown if {@code plugin} is not a
+     *     plugin instance
      */
-    <T> void setProvider(Object plugin, Class<T> service, T provider) throws ProviderExistsException;
+    <T> void setProvider(Object plugin, Class<T> service, T provider);
 
     /**
      * Return a provider for the given service, if one is available.
@@ -74,6 +68,26 @@ public interface ServiceManager {
      * @return A provider, if available
      */
     <T> Optional<T> provide(Class<T> service);
+
+    /**
+     * Gets the {@link ProviderRegistration} for the given service, if available.
+     *
+     * @param service The service
+     * @param <T> The type of service
+     * @return The {@link ProviderRegistration}, if available.
+     */
+    <T> Optional<ProviderRegistration<T>> getRegistration(Class<T> service);
+
+    /**
+     * Gets whether the class of the type of service is already registered with
+     * this manager. This does not register or unregister any services.
+     *
+     * @param service The service class
+     * @return True if there is a provider for the desired service
+     */
+    default boolean isRegistered(Class<?> service) {
+        return provide(service).isPresent();
+    }
 
     /**
      * Return a provider for the given service, raising an unchecked exception

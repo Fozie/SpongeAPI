@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,19 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.block;
 
+import org.spongepowered.api.CatalogType;
+import org.spongepowered.api.block.trait.BlockTrait;
+import org.spongepowered.api.data.DataHolder;
+import org.spongepowered.api.data.property.PropertyHolder;
+import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.text.translation.Translatable;
+import org.spongepowered.api.util.annotation.CatalogedBy;
+
+import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Describes a base type of block.
  *
- * <p>Currently, instances of this class do not fully represent variants of
- * certain blocks because some blocks use data values (which are being
- * phased out in Minecraft).</p>
+ * <p>Blocks are further differentiated using a {@link BlockState}. Complex
+ * data, such as inventory contents, are considered data, which is provided
+ * via {@link DataHolder}.</p>
  */
-public interface BlockType extends Translatable {
+@CatalogedBy(BlockTypes.class)
+public interface BlockType extends CatalogType, Translatable, PropertyHolder {
 
     /**
      * Return the internal ID for the block.
@@ -45,7 +54,8 @@ public interface BlockType extends Translatable {
      *
      * @return The id
      */
-    String getId();
+    @Override
+    String getName();
 
     /**
      * Return the default state for this block.
@@ -55,12 +65,51 @@ public interface BlockType extends Translatable {
     BlockState getDefaultState();
 
     /**
-     * Get the block state for a given data value.
-     *
-     * @param data The data value to extract into a block state
-     * @return Block state with properties set according to the data value
-     * @deprecated Exists for backwards-compatibility/transitional use
+     * Return the {@link ItemType} that represents this block.
+     * @return The item type or {@link Optional#empty()} otherwise
      */
-    @Deprecated
-    BlockState getStateFromDataValue(byte data);
+    Optional<ItemType> getItem();
+
+    /**
+     * Gets if this BlockType is set to receive random block ticks.
+     *
+     * <p>Random block ticks are most commonly used for growth of plants.</p>
+     *
+     * @return If the BlockType ticks randomly.
+     */
+    boolean getTickRandomly();
+
+    /**
+     * Sets if the BlockType should receive random block ticks.
+     *
+     * <p>Random block ticks are most commonly used for growth of plants.</p>
+     *
+     * @param tickRandomly If the BlockType should tick randomly.
+     */
+    void setTickRandomly(boolean tickRandomly);
+
+    /**
+     * Gets an immutable {@link Collection} of all applicable
+     * {@link BlockTrait}s for this {@link BlockType}.
+     *
+     * @return An immutable collection of all applicable block traits
+     */
+    Collection<BlockTrait<?>> getTraits();
+
+    /**
+     * Attempts to retrieve the {@link BlockTrait} instance associated with
+     * this {@link BlockState}s {@link BlockType} by string id. If there is no
+     * {@link BlockTrait} available, {@link Optional#empty()} is returned.
+     *
+     * @param blockTrait The block trait id
+     * @return The block trait, if available
+     */
+    Optional<BlockTrait<?>> getTrait(String blockTrait);
+
+    /**
+     * Gets the {@link BlockSoundGroup} for this block.
+     *
+     * @return This block's sound group.
+     */
+    BlockSoundGroup getSoundGroup();
 }

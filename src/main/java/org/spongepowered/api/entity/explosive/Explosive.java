@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +24,11 @@
  */
 package org.spongepowered.api.entity.explosive;
 
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.ExplosionRadiusData;
+import org.spongepowered.api.data.value.mutable.OptionalValue;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.event.cause.Cause;
 
 /**
  * Represents an explosive entity that explodes.
@@ -32,8 +36,31 @@ import org.spongepowered.api.entity.Entity;
 public interface Explosive extends Entity {
 
     /**
-     * Detonates this explosive immediately.
+     * Returns the {@link ExplosionRadiusData} for this explosive.
+     *
+     * @return Explosion radius data
      */
-    void detonate();
+    default ExplosionRadiusData getExplosionRadiusData() {
+        return get(ExplosionRadiusData.class).get();
+    }
+
+    /**
+     * The radius in blocks that the explosion will affect. This value may be
+     * missing if the explosion radius is unknown such as when it is generated
+     * randomly on detonation. Setting this value on such explosives will
+     * override that behavior.
+     *
+     * @return Explosion radius
+     */
+    default OptionalValue<Integer> explosionRadius() {
+        return getValue(Keys.EXPLOSION_RADIUS).get();
+    }
+
+    /**
+     * Detonates this explosive as soon as possible.
+     *
+     * @param cause The cause of detonation
+     */
+    void detonate(Cause cause);
 
 }

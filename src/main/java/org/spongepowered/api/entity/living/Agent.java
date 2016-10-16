@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,26 +24,64 @@
  */
 package org.spongepowered.api.entity.living;
 
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.AgentData;
+import org.spongepowered.api.data.value.mutable.Value;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.ai.Goal;
+import org.spongepowered.api.entity.ai.GoalType;
+import org.spongepowered.api.entity.ai.task.AITask;
+
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 /**
- * An Agent represents a {@link Living} that has AI.
- * In the future Sponge will allow for custom AIs, but for now vanilla behavior can only be disabled.
+ * An Agent represents a {@link Living} that has AI. In the future Sponge will
+ * allow for custom AIs, but for now vanilla behavior can only be disabled.
  */
 public interface Agent extends Living {
 
     /**
-     * Returns whether AI is currently enabled for this Agent.
+     * Gets the current target, usually according to the various
+     * {@link AITask}s that are acting on this agent.
      *
-     * @return A boolean for whether AI is currently enabled
+     * @return The target entity, if available
      */
-    boolean isAiEnabled();
+    Optional<Entity> getTarget();
 
     /**
-     * Sets whether AI is currently enabled for this Agent.
+     * Sets the current target, usually to bypass what the {@link AITask}s are
+     * deciding to be the target.
      *
-     * @param aiEnabled True if AI should be enabled for this Agent
+     * @param target The target entity, or null
      */
-    void setAiEnabled(boolean aiEnabled);
+    void setTarget(@Nullable Entity target);
 
-    // TODO for 1.1 add methods like getTarget, setTarget, etc.
+    /**
+     * Gets a copy of the {@link AgentData} associated with this {@link Agent}.
+     *
+     * @return A copy of the agent data
+     */
+    default AgentData getAgentData() {
+        return get(AgentData.class).get();
+    }
 
+    /**
+     * Gets the {@link Value} for whether AI tasks are enabled or not.
+     *
+     * @return The value for the current "enabled" state of ai tasks
+     */
+    default Value<Boolean> aiEnabled() {
+        return getValue(Keys.AI_ENABLED).get();
+    }
+
+    /**
+     * Gets a {@link Goal} based on the {@link GoalType}.
+     *
+     * @param type GoalType to lookup
+     * @param <T> Inferred agent type
+     * @return The goal or {@link Optional#empty()} if not found.
+     */
+    <T extends Agent> Optional<Goal<T>> getGoal(GoalType type);
 }

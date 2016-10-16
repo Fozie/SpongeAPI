@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,8 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.entity.living.animal;
+
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.PigSaddleData;
+import org.spongepowered.api.data.value.mutable.Value;
 
 /**
  * Represents a Pig.
@@ -31,19 +34,16 @@ package org.spongepowered.api.entity.living.animal;
 public interface Pig extends Animal {
 
     /**
-     * Returns whether this pig is saddled or not.
-     * <p>A saddled pig becomes player rideable with vanilla mechanics.</p>
+     * Gets the {@link PigSaddleData} for this {@link Pig}.
      *
-     * @return Whether this pig is saddled
+     * @return The pig saddle data
      */
-    boolean isSaddled();
+    default PigSaddleData getPigSaddleData() {
+        return get(PigSaddleData.class).get();
+    }
 
-    /**
-     * Sets this pig to be saddled or not.
-     * <p>A saddled pig becomes player rideable with vanilla mechanics.</p>
-     *
-     * @param saddled Whether this pig is to be saddled or not
-     */
-    void setSaddled(boolean saddled);
+    default Value<Boolean> saddled() {
+        return getValue(Keys.PIG_SADDLE).get();
+    }
 
 }

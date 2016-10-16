@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,18 +24,23 @@
  */
 package org.spongepowered.api.text.action;
 
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.text.message.Message;
+import org.spongepowered.api.entity.EntityType;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
+import org.spongepowered.api.statistic.achievement.Achievement;
+import org.spongepowered.api.text.Text;
 
 import java.net.URL;
+import java.util.UUID;
+import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
 
 /**
  * Utility methods to create instances of {@link TextAction}s.
  */
 public final class TextActions {
-
-    private static final TextActionFactory factory = null;
 
     private TextActions() {
     }
@@ -48,7 +53,7 @@ public final class TextActions {
      * @return The created click action instance
      */
     public static ClickAction.OpenUrl openUrl(URL url) {
-        return factory.createOpenUrl(url);
+        return new ClickAction.OpenUrl(url);
     }
 
     /**
@@ -59,7 +64,7 @@ public final class TextActions {
      * @return The created click action instance
      */
     public static ClickAction.RunCommand runCommand(String command) {
-        return factory.createRunCommand(command);
+        return new ClickAction.RunCommand(command);
     }
 
     /**
@@ -70,7 +75,7 @@ public final class TextActions {
      * @return The created click action instance
      */
     public static ClickAction.ChangePage changePage(int page) {
-        return factory.createChangePage(page);
+        return new ClickAction.ChangePage(page);
     }
 
     /**
@@ -81,7 +86,19 @@ public final class TextActions {
      * @return The created click action instance
      */
     public static ClickAction.SuggestCommand suggestCommand(String command) {
-        return factory.createSuggestCommand(command);
+        return new ClickAction.SuggestCommand(command);
+    }
+
+    /**
+     * Creates a new {@link ClickAction} that will execute the given runnable on
+     * the server when clicked. The callback will expire after some amount of
+     * time (not particularly instantly, but not like overnight really either).
+     *
+     * @param callback The callback to execute
+     * @return The created click action instance
+     */
+    public static ClickAction.ExecuteCallback executeCallback(Consumer<CommandSource> callback) {
+        return new ClickAction.ExecuteCallback(callback);
     }
 
     /**
@@ -91,8 +108,8 @@ public final class TextActions {
      * @param text The text to display
      * @return The created hover action instance
      */
-    public static HoverAction.ShowText showText(Message<?> text) {
-        return factory.createShowText(text);
+    public static HoverAction.ShowText showText(Text text) {
+        return new HoverAction.ShowText(text);
     }
 
     /**
@@ -102,8 +119,8 @@ public final class TextActions {
      * @param item The item to display
      * @return The created hover action instance
      */
-    public static HoverAction.ShowItem showItem(ItemStack item) {
-        return factory.createShowItem(item);
+    public static HoverAction.ShowItem showItem(ItemStackSnapshot item) {
+        return new HoverAction.ShowItem(item);
     }
 
     /**
@@ -113,8 +130,8 @@ public final class TextActions {
      * @param achievement The achievement to display
      * @return The created hover action instance
      */
-    public static HoverAction.ShowAchievement showAchievement(Object achievement) {
-        return factory.createShowAchievement(achievement);
+    public static HoverAction.ShowAchievement showAchievement(Achievement achievement) {
+        return new HoverAction.ShowAchievement(achievement);
     }
 
     /**
@@ -124,8 +141,45 @@ public final class TextActions {
      * @param entity The entity to display
      * @return The created hover action instance
      */
-    public static HoverAction.ShowEntity showEntity(Entity entity) {
-        return factory.createShowEntity(entity);
+    public static HoverAction.ShowEntity showEntity(HoverAction.ShowEntity.Ref entity) {
+        return new HoverAction.ShowEntity(entity);
+    }
+
+    /**
+     * Creates a new {@link HoverAction} that will show information about an
+     * entity when it is hovered.
+     *
+     * @param uuid The UUID of the entity
+     * @param name The name of the entity
+     * @param type The type of the entity
+     * @return The created hover action instance
+     */
+    public static HoverAction.ShowEntity showEntity(UUID uuid, String name, @Nullable EntityType type) {
+        return showEntity(new HoverAction.ShowEntity.Ref(uuid, name, type));
+    }
+
+    /**
+     * Creates a new {@link HoverAction} that will show information about an
+     * entity when it is hovered.
+     *
+     * @param uuid The UUID of the entity
+     * @param name The name of the entity
+     * @return The created hover action instance
+     */
+    public static HoverAction.ShowEntity showEntity(UUID uuid, String name) {
+        return showEntity(new HoverAction.ShowEntity.Ref(uuid, name));
+    }
+
+    /**
+     * Creates a new {@link HoverAction} that will show information about an
+     * entity when it is hovered.
+     *
+     * @param entity The entity
+     * @param name The name of the entity
+     * @return The created hover action instance
+     */
+    public static HoverAction.ShowEntity showEntity(Entity entity, String name) {
+        return showEntity(new HoverAction.ShowEntity.Ref(entity, name));
     }
 
     /**
@@ -136,7 +190,7 @@ public final class TextActions {
      * @return The created shift click action instance
      */
     public static ShiftClickAction.InsertText insertText(String text) {
-        return factory.createInsertText(text);
+        return new ShiftClickAction.InsertText(text);
     }
 
 }

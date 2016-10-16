@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,43 +24,47 @@
  */
 package org.spongepowered.api.entity.explosive;
 
-import org.spongepowered.api.entity.explosive.Explosive;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.entity.FuseData;
+import org.spongepowered.api.event.cause.Cause;
 
 /**
  * Represents an explosive that detonates after its fuse has expired.
+ * <p>A FusedExplosive may already be ignited once spawned.</p>
  */
 public interface FusedExplosive extends Explosive {
 
     /**
-     * Ignites this explosive to detonate after some fuse duration in ticks.
+     * Returns the {@link FuseData} for this explosive.
+     *
+     * @return FuseData
      */
-    void ignite();
+    default FuseData getFuseData() {
+        return get(FuseData.class).get();
+    }
 
     /**
-     * Ignites this explosive to detonate after the given fuse ticks.
+     * Returns true if this explosive is currently primed.
      *
-     * @param fuseTicks The ticks to set the fuse
+     * @return True if primed
      */
-    void ignite(int fuseTicks);
+    boolean isPrimed();
 
     /**
-     * Gets the current fuse duration in ticks on this explosive.
-     * <p>After the fuse duration diminishes to zero, explosive entities
-     * may explode.</p><p>If the fuse duration is set to negative,
-     * the explosive may become idle.</p>
+     * Primes this explosive to detonate after the amount of ticks that
+     * this entity explodes in defined by {@link Keys#FUSE_DURATION}.
      *
-     * @return The current fuse duration in ticks
+     * @param cause The cause of this primed entity
+     * @throws IllegalStateException if explosive already primed
      */
-    int getFuseDuration();
+    void prime(Cause cause);
 
     /**
-     * Sets the remainig fuse duration in ticks on this explosive.
-     * <p>After the fuse duration diminishes to zero, explosive entities
-     * may explode.</p><p>If the fuse duration is set to negative,
-     * the explosive may become idle.</p>
+     * Cancels an actively primed explosive.
      *
-     * @param fuseTicks The ticks for the fuse
+     * @param cause The cause for diffusion
+     * @throws IllegalStateException if explosive is not primed
      */
-    void setFuseDuration(int fuseTicks);
+    void defuse(Cause cause);
 
 }

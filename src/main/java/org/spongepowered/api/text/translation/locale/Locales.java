@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,126 +24,107 @@
  */
 package org.spongepowered.api.text.translation.locale;
 
-import com.google.common.base.Optional;
+import org.spongepowered.api.Sponge;
 
-import java.util.List;
 import java.util.Locale;
 
 /**
- * Utility class for working with languages/locales in Minecraft
+ * The list of locales available in Vanilla Minecraft.
  */
 public final class Locales {
 
-    private static final LocaleFactory factory = null;
-
     private Locales() {
-
-    }
-
-    public static final Locale AFRIKAANS = null;
-    public static final Locale ARABIC = null;
-    public static final Locale ASTURIAN = null;
-    public static final Locale AZERBAIJANI = null;
-    public static final Locale BULGARIAN = null;
-    public static final Locale CATALAN = null;
-    public static final Locale CZECH = null;
-    public static final Locale WELSH = null;
-    public static final Locale DANISH = null;
-    public static final Locale GERMAN = null;
-    public static final Locale GREEK = null;
-    public static final Locale AUSTRALIAN_ENGLISH = null;
-    public static final Locale CANADIAN_ENGLISH = null;
-    public static final Locale BRITISH_ENGLISH = null;
-    public static final Locale PIRATE_ENGLISH = null;
-    public static final Locale ENGLISH = null;
-    public static final Locale ESPERANTO = null;
-    public static final Locale ARGENTINIAN_SPANISH = null;
-    public static final Locale SPANISH = null;
-    public static final Locale MEXICAN_SPANISH = null;
-    public static final Locale URUGUAYAN_SPANISH = null;
-    public static final Locale VENEZUELAN_SPANISH = null;
-    public static final Locale ESTONIAN = null;
-    public static final Locale BASQUE = null;
-    public static final Locale PERSIAN = null;
-    public static final Locale FINNISH = null;
-    public static final Locale FILIPINO = null;
-    public static final Locale CANADIAN_FRENCH = null;
-    public static final Locale FRENCH = null;
-    public static final Locale IRISH = null;
-    public static final Locale GALICIAN = null;
-    public static final Locale MANX = null;
-    public static final Locale HEBREW = null;
-    public static final Locale HINDI = null;
-    public static final Locale CROATIAN = null;
-    public static final Locale HUNGARIAN = null;
-    public static final Locale ARMENIAN = null;
-    public static final Locale INDONESIAN = null;
-    public static final Locale ICELANDIC = null;
-    public static final Locale ITALIAN = null;
-    public static final Locale JAPANESE = null;
-    public static final Locale GEORGIAN = null;
-    public static final Locale KOREAN = null;
-    public static final Locale CORNISH = null;
-    public static final Locale LATIN = null;
-    public static final Locale LUXEMBOURGISH = null;
-    public static final Locale LITHUANIAN = null;
-    public static final Locale LATVIAN = null;
-    public static final Locale MAORI = null;
-    public static final Locale MALAY = null;
-    public static final Locale MALTESE = null;
-    public static final Locale LOW_GERMAN = null;
-    public static final Locale DUTCH = null;
-    public static final Locale NORWEGIAN_NYNORSK = null;
-    public static final Locale NORWEGIAN = null;
-    public static final Locale OCCITAN = null;
-    public static final Locale POLISH = null;
-    public static final Locale BRAZILIAN_PORTUGUESE = null;
-    public static final Locale PORTUGUESE = null;
-    public static final Locale QUENYA = null;
-    public static final Locale ROMANIAN = null;
-    public static final Locale RUSSIAN = null;
-    public static final Locale SLOVAK = null;
-    public static final Locale SLOVENE = null;
-    public static final Locale SERBIAN = null;
-    public static final Locale SWEDISH = null;
-    public static final Locale THAI = null;
-    public static final Locale KLINGON = null;
-    public static final Locale TURKISH = null;
-    public static final Locale UKRAINIAN = null;
-    public static final Locale VALENCIAN = null;
-    public static final Locale VIETNAMESE = null;
-    public static final Locale SIMPLIFIED_CHINESE = null;
-    public static final Locale TRADITIONAL_CHINESE = null;
-
-    /**
-     * Gets the {@link Locale} of the specified Minecraft locale code.
-     *
-     * @param id The ID for the locale, for example "en_US" or "de_DE"
-     * @return The {@link Locale} with the specified ID, or
-     *         {@link Optional#absent} if not found
-     */
-    public static Optional<Locale> of(String id) {
-        return factory.getLocaleFromId(id);
     }
 
     /**
-     * Gets the {@link Locale} with the specified name.
+     * Gets a locale for the specified locale code, e.g. {@code en_US}.
      *
-     * @param name The name of the locale, for example "ENGLISH" or "GERMAN"
-     * @return The {@link Locale} with the specified name, or
-     *         {@link Optional#absent()} if not found
+     * @param locale The locale to lookup (e.g. {@code en_US}.
+     * @return The locale
      */
-    public static Optional<Locale> valueOf(String name) {
-        return factory.getLocaleFromName(name);
+    public static Locale of(String locale) {
+        return Sponge.getRegistry().getLocale(locale);
     }
 
+    public static final Locale AF_ZA = new Locale("af", "ZA");
+    public static final Locale AR_SA = new Locale("ar", "SA");
+    public static final Locale AST_ES = new Locale("ast", "ES");
+    public static final Locale AZ_AZ = new Locale("az", "AZ");
+    public static final Locale BG_BG = new Locale("bg", "BG");
+    public static final Locale CA_ES = new Locale("ca", "ES");
+    public static final Locale CS_CZ = new Locale("cs", "CZ");
+    public static final Locale CY_GB = new Locale("cy", "GB");
+    public static final Locale DA_DK = new Locale("da", "DK");
+    public static final Locale DE_DE = Locale.GERMANY;
+    public static final Locale EL_GR = new Locale("el", "GR");
+    public static final Locale EN_AU = new Locale("en", "AU");
+    public static final Locale EN_CA = new Locale("en", "CA");
+    public static final Locale EN_GB = Locale.UK;
+    public static final Locale EN_PT = new Locale("en", "PT");
+    public static final Locale EN_US = Locale.US;
+    public static final Locale EO_UY = new Locale("eo", "UY");
+    public static final Locale ES_AR = new Locale("es", "AR");
+    public static final Locale ES_ES = new Locale("es", "ES");
+    public static final Locale ES_MX = new Locale("es", "MX");
+    public static final Locale ES_UY = new Locale("es", "UY");
+    public static final Locale ES_VE = new Locale("es", "VE");
+    public static final Locale ET_EE = new Locale("et", "EE");
+    public static final Locale EU_ES = new Locale("eu", "ES");
+    public static final Locale FA_IR = new Locale("fa", "IR");
+    public static final Locale FI_FI = new Locale("fi", "FI");
+    public static final Locale FIL_PH = new Locale("fil", "PH");
+    public static final Locale FR_CA = Locale.CANADA_FRENCH;
+    public static final Locale FR_FR = Locale.FRANCE;
+    public static final Locale GA_IE = new Locale("ga", "IE");
+    public static final Locale GL_ES = new Locale("gl", "ES");
+    public static final Locale GV_IM = new Locale("gv", "IM");
+    public static final Locale HE_IL = new Locale("he", "IL");
+    public static final Locale HI_IN = new Locale("hi", "IN");
+    public static final Locale HR_HR = new Locale("hr", "HR");
+    public static final Locale HU_HU = new Locale("hu", "HU");
+    public static final Locale HY_AM = new Locale("hy", "AM");
+    public static final Locale ID_ID = new Locale("id", "ID");
+    public static final Locale IS_IS = new Locale("is", "IS");
+    public static final Locale IT_IT = Locale.ITALY;
+    public static final Locale JA_JP = Locale.JAPAN;
+    public static final Locale KA_GE = new Locale("ka", "GE");
+    public static final Locale KO_KR = Locale.KOREA;
+    public static final Locale KW_GB = new Locale("kw", "GB");
+    public static final Locale LA_LA = new Locale("la", "LA");
+    public static final Locale LB_LU = new Locale("lb", "LU");
+    public static final Locale LT_LT = new Locale("lt", "LT");
+    public static final Locale LV_LV = new Locale("lv", "LV");
+    public static final Locale MI_NZ = new Locale("mi", "NZ");
+    public static final Locale MS_MY = new Locale("ms", "MY");
+    public static final Locale MT_MT = new Locale("mt", "MT");
+    public static final Locale NDS_DE = new Locale("nds", "DE");
+    public static final Locale NL_NL = new Locale("nl", "NL");
+    public static final Locale NN_NO = new Locale("nn", "NO");
+    public static final Locale NO_NO = new Locale("no", "NO");
+    public static final Locale OC_FR = new Locale("oc", "FR");
+    public static final Locale PL_PL = new Locale("pl", "PL");
+    public static final Locale PT_BR = new Locale("pt", "BR");
+    public static final Locale PT_PT = new Locale("pt", "PT");
+    public static final Locale QYA_AA = new Locale("qya", "AA");
+    public static final Locale RO_RO = new Locale("ro", "RO");
+    public static final Locale RU_RU = new Locale("ru", "RU");
+    public static final Locale SE_NO = new Locale("se", "NO");
+    public static final Locale SK_SK = new Locale("sk", "SK");
+    public static final Locale SL_SI = new Locale("sl", "SI");
+    public static final Locale SR_SP = new Locale("sr", "SP");
+    public static final Locale SV_SE = new Locale("sv", "SE");
+    public static final Locale TH_TH = new Locale("th", "TH");
+    public static final Locale TLH_AA = new Locale("tlh", "AA");
+    public static final Locale TR_TR = new Locale("tr", "TR");
+    public static final Locale UK_UA = new Locale("uk", "UA");
+    public static final Locale VAL_ES = new Locale("val", "ES");
+    public static final Locale VI_VN = new Locale("vi", "VN");
+    public static final Locale ZH_CN = Locale.SIMPLIFIED_CHINESE;
+    public static final Locale ZH_TW = Locale.TRADITIONAL_CHINESE;
+
     /**
-     * Returns a list of all available {@link Locale}s on this server.
-     *
-     * @return An immutable list of all locales
+     * The default locale used when the receiver's locale is unknown.
      */
-    public static List<Locale> getValues() {
-        return factory.getLocales();
-    }
+    public static final Locale DEFAULT = EN_US;
 
 }

@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,62 +24,36 @@
  */
 package org.spongepowered.api.text.chat;
 
-import com.google.common.base.Optional;
-
-import java.util.List;
+import org.spongepowered.api.util.generator.dummy.DummyObjectProvider;
 
 /**
- * ChatTypes is a list of the default chat positions that are available in
- * Minecraft. The values are filled in by mixins in Sponge at runtime.
+ * ChatTypes is a list of the default chat types that are available in Vanilla
+ * Minecraft.
  */
 public final class ChatTypes {
 
-    private static final ChatTypeFactory factory = null;
-
     private ChatTypes() {
-
     }
-
-    /**
-     * The standard chat position in prompt at the bottom-left.
-     */
-    public static final ChatType CHAT = null;
-
-    /**
-     * The same position as the {@link #CHAT} position, except messages sent to
-     * this position are still seen when chat is turned off on the Minecraft
-     * client.
-     *
-     * <p>
-     * Use wisely as to not annoy players.
-     * </p>
-     */
-    public static final ChatType SYSTEM = null;
+    // SORTFIELDS:ON
 
     /**
      * The position right above the inventory, experience, health, item name,
      * etc. bars.
      */
-    public static final ChatType ACTION_BAR = null;
+    public static final ChatType ACTION_BAR = DummyObjectProvider.createFor(ChatType.class, "ACTION_BAR");
 
     /**
-     * Gets the {@link ChatType} with the specified name.
-     *
-     * @param name The identifier of the chat type, for example "ACTION_BAR"
-     * @return The {@link ChatType} with the specified name, or
-     *         {@link Optional#absent()} if not found
+     * The standard chat position in prompt at the bottom-left.
      */
-    public static Optional<ChatType> valueOf(String name) {
-        return factory.getTypeFromName(name);
-    }
+    public static final ChatType CHAT = DummyObjectProvider.createFor(ChatType.class, "CHAT");
 
     /**
-     * Returns a list of all available {@link ChatType}s on this server.
-     *
-     * @return An immutable list of all chat types
+     * The same position as the {@link #CHAT} position, except messages sent to
+     * this position are still seen when chat is turned off on the Minecraft
+     * client.
      */
-    public static List<ChatType> getValues() {
-        return factory.getTypes();
-    }
+    public static final ChatType SYSTEM = DummyObjectProvider.createFor(ChatType.class, "SYSTEM");
+
+    // SORTFIELDS:OFF
 
 }

@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,54 +24,44 @@
  */
 package org.spongepowered.api.item.merchant;
 
-import com.google.common.base.Optional;
-import org.spongepowered.api.entity.living.Human;
+import org.spongepowered.api.data.DataHolder;
+import org.spongepowered.api.data.manipulator.mutable.entity.TradeOfferData;
+import org.spongepowered.api.entity.living.Humanoid;
+import org.spongepowered.api.item.inventory.Carrier;
 
-import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-public interface Merchant {
-
-    /**
-     * Sets the currently trading customer with this merchant.
-     * <p>If the human entity is available, a new trading window may open
-     * with this merchant.</p>
-     *
-     * @param human The human to trade with
-     */
-    void setCustomer(@Nullable Human human);
+/**
+ * Represents a Merchant which can offer trades to customers.
+ */
+public interface Merchant extends DataHolder, Carrier {
 
     /**
      * Gets the currently trading customer with this merchant.
      *
      * @return The currently trading customer if available
      */
-    Optional<Human> getCustomer();
+    Optional<Humanoid> getCustomer();
 
     /**
-     * Gets an immutable list of {@link TradeOffer}s that this merchant
-     * can send to a {@link org.spongepowered.api.entity.living.Human}.
+     * Sets the currently trading customer with this merchant.
+     * <p>If the humanoid entity is available, a new trading window may open
+     * with this merchant.</p>
      *
-     * @return An immutable list of trade offers
+     * @param humanoid The humanoid to trade with
      */
-    List<TradeOffer> getOffers();
+    void setCustomer(@Nullable Humanoid humanoid);
 
     /**
-     * Adds the given offer to the list of offers provided by this merchant.
+     * Gets a copy of the used {@link TradeOfferData} containing all available
+     * {@link TradeOffer}s this {@link Merchant} may use.
      *
-     * @param offer The offer to add
+     * @return A copy of the trade offer data
      */
-    void addOffer(TradeOffer offer);
-
-    /**
-     * Replaces the entire list of trade offers this merchant can trade
-     * with a {@link org.spongepowered.api.entity.living.Human}.
-     * <p>When a merchant is in the middle of a trade, the offers may change
-     * dynamically according to the offers completed by the customer.</p>
-     *
-     * @param offers The offers to set
-     */
-    void setOffers(List<TradeOffer> offers);
+    default TradeOfferData getTradeOfferData() {
+        return get(TradeOfferData.class).get();
+    }
 
 }

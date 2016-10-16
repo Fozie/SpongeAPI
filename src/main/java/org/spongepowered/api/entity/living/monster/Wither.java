@@ -1,7 +1,7 @@
 /*
- * This file is part of Sponge, licensed under the MIT License (MIT).
+ * This file is part of SpongeAPI, licensed under the MIT License (MIT).
  *
- * Copyright (c) SpongePowered.org <http://www.spongepowered.org>
+ * Copyright (c) SpongePowered <https://www.spongepowered.org>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,40 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.spongepowered.api.entity.living.monster;
 
+import org.spongepowered.api.entity.explosive.FusedExplosive;
+import org.spongepowered.api.entity.living.Aerial;
+import org.spongepowered.api.entity.living.Agent;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.entity.projectile.source.ProjectileSource;
+import org.spongepowered.api.entity.living.Ranger;
 
 import java.util.List;
 
 /**
  * Represents the Wither.
  */
-public interface Wither extends Monster, ProjectileSource {
+public interface Wither extends Monster, Ranger, Boss, Aerial, FusedExplosive {
 
     /**
-     * Gets the amount of ticks that the Wither should stay
-     * invulnerable for.
+     * Gets the list of {@link Living} targets that this wither is targeting.
+     * Usually, as an {@link Agent}, {@link #getTarget()} would be sufficient,
+     * however, due to a Wither having the possibility of 3 targets, this
+     * is preferred use.
      *
-     * @return The invulnerable time in ticks
-     */
-    long getInvulnerableTicks();
-
-    /**
-     * Sets the amount of ticks that the Wither should stay
-     * invulnerable for.
-     *
-     * @param invulnerableTicks The invulnerable time in ticks
-     */
-    void setInvulnerableTicks(long invulnerableTicks);
-
-    /**
-     * Gets the entities currently being targetted by this wither.
-     * <p>This list should contain a maximum of 3 entities.</p>
-     *
-     * @return The Wither's targets
+     * @return The list of living targets
      */
     List<Living> getTargets();
+
+    /**
+     * Sets the list of living targets.
+     *
+     * @param targets The targets
+     */
+    void setTargets(List<Living> targets);
+
 }
